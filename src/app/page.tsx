@@ -46,7 +46,7 @@ export default function Home() {
             textTransform: "uppercase",
           }}
         >
-          ทำด้วยความตั้งใจ เพื่อหญิง
+         ❤️❤️❤️❤️❤️❤️
         </p>
         <p
           style={{
