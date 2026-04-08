@@ -234,18 +234,16 @@ export default function CalendarCarousel() {
       );
 
       // 3. Fade in Sentence 1
-      tl.fromTo(
+      tl.to(
         ".final-chinese-1",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" },
+        { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" },
         finalOutTime + 1.0
       );
 
       // 4. Fade in Sentence 2
-      tl.fromTo(
+      tl.to(
         ".final-chinese-2",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" },
+        { autoAlpha: 1, y: 0, duration: 1.5, ease: "power2.out" },
         finalOutTime + 2.0
       );
       
@@ -407,8 +405,8 @@ export default function CalendarCarousel() {
                   <div
                     style={{
                       background: "rgba(255, 255, 255, 0.45)",
-                      backdropFilter: "blur(20px) saturate(1.2)",
-                      WebkitBackdropFilter: "blur(20px) saturate(1.2)",
+                      backdropFilter: "blur(10px) saturate(1.2)", // Dropped from 20px blur for massive mobile GPU performance boost
+                      WebkitBackdropFilter: "blur(10px) saturate(1.2)",
                       borderRadius: "1.5rem",
                       padding: "clamp(1.5rem, 5vw, 2.5rem)",
                       boxShadow: `
@@ -532,6 +530,7 @@ export default function CalendarCarousel() {
                         width: "clamp(150px, 35vw, 200px)", // Increased from 120/160
                         ...pos,
                         opacity: 0,
+                        willChange: "transform, opacity", // Hardware acceleration for buttery smooth scrolling
                       }}
                     >
                       <div className="polaroid-inner polaroid-float" style={{ width: "100%", height: "100%", animationDelay: `${(i + mIdx) * 0.7}s`, animationDuration: `${3 + (i % 2)}s` }}>
@@ -595,15 +594,16 @@ export default function CalendarCarousel() {
                      key={`collage-${i}`}
                      style={{
                        position: "absolute",
-                       // Distribute evenly across 5 columns and 6 rows, adding slight pseudo-random scatter
-                       left: `${col * 22 - 5 + ((i * 13) % 15)}%`, 
-                       top: `${row * 18 - 5 + ((i * 17) % 15)}%`,
+                       // Perfectly balanced 5x6 grid mapping, sprinkled with deterministic sin/cos variance for organic spacing
+                       left: `${col * 22 - 2 + (Math.sin(i * 13) * 6)}%`, 
+                       top: `${row * 18 - 2 + (Math.cos(i * 17) * 6)}%`,
                        transform: `translate(-50%, -50%) rotate(${((i * 47) % 60) - 30}deg)`,
                        width: "clamp(120px, 18vw, 180px)", // Restored elegant smaller size
-                       opacity: 0.15, // Extremely subtle so text dominates
+                       opacity: 0.10, // Dialed down slighty so text massively commands the frame
                        mixBlendMode: "multiply", 
-                       borderRadius: "8px",
+                       borderRadius: "12px",
                        overflow: "hidden",
+                       willChange: "transform, opacity", // Force hardware layer so 30 images don't crash mobile
                      }}
                    >
                      <img src={src} alt="memory overlay" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -619,7 +619,7 @@ export default function CalendarCarousel() {
              </div>
              <div className="text-center z-10 px-6 w-full max-w-4xl flex flex-col gap-10">
                {/* First Block */}
-               <div className="final-chinese-1 opacity-0">
+               <div className="final-chinese-1" style={{ visibility: "hidden", opacity: 0, transform: "translateY(20px)" }}>
                  <h1 
                    style={{ 
                      color: "#d81b60", 
@@ -648,7 +648,7 @@ export default function CalendarCarousel() {
                </div>
 
                {/* Second Block */}
-               <div className="final-chinese-2 opacity-0">
+               <div className="final-chinese-2" style={{ visibility: "hidden", opacity: 0, transform: "translateY(20px)" }}>
                  <h1 
                    style={{ 
                      color: "#d81b60", 
